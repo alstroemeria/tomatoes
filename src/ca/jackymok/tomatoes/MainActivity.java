@@ -4,20 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 import ca.jackymok.tomatoes.app.MyVolley;
 import ca.jackymok.tomatoes.misc.Movie;
 import ca.jackymok.tomatoes.misc.MovieArrayAdapter;
@@ -31,35 +28,35 @@ import com.android.volley.VolleyError;
 
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity 
+	implements TitleFragment.OnHeadlineSelectedListener {
 
 	    private ListView mLvMovie;
 	    private boolean mHasData = false;
 	    private boolean mInError = false;
-	    private ArrayList<Movie> mEntries = new ArrayList<Movie>();
-	    private MovieArrayAdapter mAdapter;
+	    ArrayList<Movie> mEntries = new ArrayList<Movie>();
+	    MovieArrayAdapter mAdapter;
 	    
 
 	    @Override
 	    protected void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
-	        setContentView(R.layout.activity_main);
-
-	        mLvMovie = (ListView) findViewById(R.id.lv_movie);
+	        //setContentView(R.layout.activity_main);
+	        setContentView(R.layout.list_frag);
 	        mAdapter = new MovieArrayAdapter(this, 0, mEntries, MyVolley.getImageLoader());
-	        mLvMovie.setAdapter(mAdapter);
-	        mLvMovie.setOnItemClickListener(new OnItemClickListener() {
-	            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 
-	            	Context context = getApplicationContext();
-	            	CharSequence text = (CharSequence) mEntries.get(position).getTitle();
-	            	int duration = Toast.LENGTH_SHORT;
-
-	            	Toast toast = Toast.makeText(context, text, duration);
-	            	toast.show();
-	            }
-	          });
-	       // mLvMovie.setOnScrollListener(new EndlessScrollListener());
+	        if (findViewById(R.id.fragment_container) != null) {
+	        	 if (savedInstanceState != null) {
+	                 return;
+	             }
+	        	 TitleFragment firstFragment = new TitleFragment();
+	        	 firstFragment.setArguments(getIntent().getExtras());
+	        	 getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
+	        	 
+	        }
+	        
+	        //mLvMovie = (ListView) findViewById(R.id.lv_movie);
+	        //mLvMovie.setAdapter(mAdapter);
 	    }
 
 		@Override
@@ -85,8 +82,6 @@ public class MainActivity extends Activity {
 	        }
 	    }
 
-
-
 	    private void loadPage() {
 	        RequestQueue queue = MyVolley.getRequestQueue();
 
@@ -105,6 +100,7 @@ public class MainActivity extends Activity {
 	            @Override
 	            public void onResponse(Movies response) {
 	                try {
+	                	         	
 	                	List<Movie> movies = response.getMovies();
 	                	Movie movie;
 	                    for (int i = 0; i < movies.size(); i++) {
@@ -139,6 +135,40 @@ public class MainActivity extends Activity {
 	        b.setMessage("Error occured");
 	        b.show();
 	    }
+
+		@Override
+		public void onArticleSelected(int position) {
+			// The user selected the headline of an article from the HeadlinesFragment
+
+	        // Capture the article fragment from the activity layout
+	        MovieFragment articleFrag = (MovieFragment)
+	                getSupportFragmentManager().findFragmentById(R.id.article_fragment);
+
+	        if (articleFrag != null) {
+	            // If article frag is available, we're in two-pane layout...
+
+	            // Call a method in the ArticleFragment to update its content
+	            articleFrag.updateArticleView(position);
+
+	        } else {
+	            // If the frag is not available, we're in the one-pane layout and must swap frags...
+
+	            // Create fragment and give it an argument for the selected article
+	            MovieFragment newFragment = new MovieFragment();
+	            Bundle args = new Bundle();
+	            args.putInt(MovieFragment.ARG_POSITION, position);
+	            newFragment.setArguments(args);
+	            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+	            // Replace whatever is in the fragment_container view with this fragment,
+	            // and add the transaction to the back stack so the user can navigate back
+	            transaction.replace(R.id.fragment_container, newFragment);
+	            transaction.addToBackStack(null);
+
+	            // Commit the transaction
+	            transaction.commit();
+	        }
+		}
 	    
 	    
 	    /**
