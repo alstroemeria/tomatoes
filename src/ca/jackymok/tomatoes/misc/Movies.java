@@ -1,11 +1,16 @@
 
 package ca.jackymok.tomatoes.misc;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class Movies{
-   	private String link_template;
+public class Movies implements Serializable{
+   	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String link_template;
    	private Links links;
    	private List<Movie> movies;
 

@@ -1,7 +1,13 @@
 package ca.jackymok.tomatoes.misc;
 
-public class Ratings {
-   	private String critics_rating;
+import java.io.Serializable;
+
+public class Ratings implements Serializable{
+   	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String critics_rating;
    	private String critics_score;
    	private String audience_rating;
    	private String audience_score;

@@ -8,10 +8,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
 import ca.jackymok.tomatoes.app.MyVolley;
@@ -41,20 +46,25 @@ public class MainActivity extends Activity {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.activity_main);
 	        //setContentView(R.layout.list_frag);
-	        mAdapter = new MovieArrayAdapter(this, 0, mEntries, MyVolley.getImageLoader());
-
-//	        if (findViewById(R.id.fragment_container) != null) {
-//	        	 if (savedInstanceState != null) {
-//	                 return;
-//	             }
-//	        	 TitleFragment firstFragment = new TitleFragment();
-//	        	 firstFragment.setArguments(getIntent().getExtras());
-//	        	 getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
-//	        	 
-//	        }
 	        
+	        mAdapter = new MovieArrayAdapter(this, 0, mEntries, MyVolley.getImageLoader());
 	        mLvMovie = (ListView) findViewById(R.id.lv_movie);
 	        mLvMovie.setAdapter(mAdapter);
+	        
+	        mLvMovie.setOnItemClickListener(new OnItemClickListener() {
+
+	        	
+	            @Override
+	            public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+	                    long arg3) {
+	                // TODO Auto-generated method stub
+	                Intent intent = new Intent(getBaseContext(), MovieDetailActivity.class);
+	                intent.putExtra("movie", mEntries.get(pos));
+	                startActivity(intent);
+	                Log.d("clicked on",mEntries.get(pos).getSynopsis() );
+	            }
+
+	        });
 	    }
 
 		@Override

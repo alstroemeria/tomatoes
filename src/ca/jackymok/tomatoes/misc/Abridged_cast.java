@@ -1,10 +1,15 @@
 
 package ca.jackymok.tomatoes.misc;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Abridged_cast{
-   	private List characters;
+public class Abridged_cast implements Serializable{
+   	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private List characters;
    	private String id;
    	private String name;
 

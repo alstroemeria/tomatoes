@@ -1,6 +1,12 @@
 package ca.jackymok.tomatoes.misc;
 
-public class Posters {
+import java.io.Serializable;
+
+public class Posters implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String thumbnail;
    	private String profile;
    	private String detailed;

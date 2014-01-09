@@ -1,10 +1,15 @@
 
 package ca.jackymok.tomatoes.misc;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Movie{
-   	private List<Abridged_cast> abridged_cast;
+public class Movie implements Serializable{
+   	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private List<Abridged_cast> abridged_cast;
    	private Alternate_ids alternate_ids;
    	private String critics_consensus;
    	private String id;

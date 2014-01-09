@@ -1,6 +1,12 @@
 package ca.jackymok.tomatoes.misc;
 
-public class Release_dates {
+import java.io.Serializable;
+
+public class Release_dates implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String theater;
    	private String dvd;
 
