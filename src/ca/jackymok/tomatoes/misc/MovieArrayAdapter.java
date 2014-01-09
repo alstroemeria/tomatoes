@@ -3,6 +3,7 @@ package ca.jackymok.tomatoes.misc;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,8 +52,28 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         }
         
         holder.title.setText(entry.getTitle());
-        //holder.subtitle.setText(entry.getCritics_consensus());
+        holder.subtitle.setText(entry.getCritics_consensus());
         
+        int score = Integer.parseInt(entry.getRatings().getCritics_score());
+        
+        StringBuilder actors = new StringBuilder();
+        try{
+        	actors.append(entry.getAbridged_cast().get(0).getName());
+        	actors.append(", ");
+        	actors.append(entry.getAbridged_cast().get(1).getName());
+        	actors.append(" | ");
+        	actors.append(entry.getRelease_dates().getTheater());
+
+        }
+        catch(Exception e)
+        {
+        	
+        }
+
+        holder.status.setText(actors);
+        holder.rating.setText(entry.getRatings().getCritics_score());
+        holder.rating.setTextColor(score>50? Color.parseColor("#ea6153"):Color.parseColor("#27ae60"));
+
         return v;
     }
     
@@ -61,14 +82,16 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
     private class ViewHolder {
         NetworkImageView image;
         TextView title; 
-        //TextView subtitle;
-        //ListView listview;
+        TextView subtitle;
+        TextView rating;
+        TextView status;
         
         public ViewHolder(View v) {
             image = (NetworkImageView) v.findViewById(R.id.iv_thumb);
-            title = (TextView) v.findViewById(R.id.tv_title);
-            //subtitle = (TextView) v.findViewById(R.id.tv_subtitle);
-            //listview = (ListView) v.findViewById(R.id.lv_list);
+            title = (TextView) v.findViewById(R.id.title);
+            subtitle = (TextView) v.findViewById(R.id.subtitle);
+            rating = (TextView) v.findViewById(R.id.rating);
+            status = (TextView) v.findViewById(R.id.status);
             v.setTag(this);
         }
     }

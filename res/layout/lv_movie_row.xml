@@ -1,20 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:gravity="left|center_vertical"
-    >
-    <com.android.volley.toolbox.NetworkImageView 
-	    android:layout_width="80dp"
-	    android:layout_height="100dp"
-	    android:id="@+id/iv_thumb"
-    />
+    android:padding="5dip" >
+ 
+    <!--  ListRow Left sied Thumbnail image -->
+    <LinearLayout android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip">
+ 
+        
+        
+        <com.android.volley.toolbox.NetworkImageView 
+            
+        	android:layout_width="55dp"
+        	android:layout_height="80dp"
+	    	android:id="@+id/iv_thumb"
+    	/>
+
+ 
+    </LinearLayout>
+ 
     <TextView
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:id="@+id/tv_title"
-	    android:layout_marginLeft="5dp"
-    />
-   
-</LinearLayout>
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="16dip"
+        />
+ 
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:textSize="10dip" 
+        android:fontFamily="sans"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="status" />
+    
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/status"
+        android:textSize="10dip" 
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="subtext" />
+ 
+ 
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/title"
+        android:gravity="right"
+        android:text="79"
+        android:layout_marginRight="5dip"
+        android:textSize="18dip"
+        android:textColor="#ea6153"
+        android:textStyle="bold"/>
+ 
+
+ 
+</RelativeLayout>
