@@ -54,24 +54,18 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         holder.title.setText(entry.getTitle());
         holder.subtitle.setText(entry.getCritics_consensus());
         
-        int score = Integer.parseInt(entry.getRatings().getCritics_score());
+        int score = entry.getRatings().getCritics_score();
         
         StringBuilder actors = new StringBuilder();
-        try{
-        	actors.append(entry.getAbridged_cast().get(0).getName());
-        	actors.append(", ");
-        	actors.append(entry.getAbridged_cast().get(1).getName());
-        	actors.append(" | ");
-        	actors.append(entry.getRelease_dates().getTheater());
-
-        }
-        catch(Exception e)
-        {
-        	
-        }
+        
+        actors.append(entry.getAbridged_cast().get(0).getName());
+        actors.append(", ");
+        actors.append(entry.getAbridged_cast().get(1).getName());
+        actors.append(" | ");
+        actors.append(entry.getRelease_dates().getTheater());
 
         holder.status.setText(actors);
-        holder.rating.setText(entry.getRatings().getCritics_score());
+        holder.rating.setText(entry.getRatings().getCritics_score()+"");
         holder.rating.setTextColor(score>50? Color.parseColor("#ea6153"):Color.parseColor("#27ae60"));
 
         return v;

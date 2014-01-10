@@ -16,8 +16,12 @@
 
 package ca.jackymok.tomatoes.toolbox;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import android.renderscript.Type;
+import android.text.format.DateFormat;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -26,8 +30,13 @@ import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
-
-import java.io.UnsupportedEncodingException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 
 
 public class GsonRequest<T> extends Request<T> {
@@ -44,7 +53,24 @@ public class GsonRequest<T> extends Request<T> {
         super(Method.GET, url, errorListener);
         this.mClazz = clazz;
         this.mListener = listener;
-        mGson = new Gson();
+        
+        //Create Gson qith custom Date parsing
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {  
+            final java.text.DateFormat df = new SimpleDateFormat("yyyy-MM-dd");  
+			@Override
+			public Date deserialize(JsonElement arg0,
+					java.lang.reflect.Type arg1, JsonDeserializationContext arg2)
+					throws JsonParseException {
+				 try {  
+	             	return df.parse(arg0.getAsString());  
+	             } catch (final java.text.ParseException e) {  
+	             	e.printStackTrace();  
+	             	return null;  
+	             }  
+			}  
+        });
+        mGson = gsonBuilder.create();
     }
 
 

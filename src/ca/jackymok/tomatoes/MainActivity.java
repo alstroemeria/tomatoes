@@ -119,6 +119,7 @@ public class MainActivity extends Activity {
 	                    mHasData = true;
 	                    mAdapter.notifyDataSetChanged();
 	                } catch (Exception e) {
+	                	Log.d("exception",e.toString());
 	                    showErrorDialog();
 	                }
 	            }
@@ -130,6 +131,8 @@ public class MainActivity extends Activity {
 	        return new Response.ErrorListener() {
 	            @Override
 	            public void onErrorResponse(VolleyError error) {
+                	Log.d("exception",error.toString());
+
 	                showErrorDialog();
 	            }
 	        };
@@ -144,40 +147,7 @@ public class MainActivity extends Activity {
 	        b.show();
 	    }
 
-//		@Override
-//		public void onArticleSelected(int position) {
-//			// The user selected the headline of an article from the HeadlinesFragment
-//
-//	        // Capture the article fragment from the activity layout
-//	        MovieFragment articleFrag = (MovieFragment)
-//	                getSupportFragmentManager().findFragmentById(R.id.article_fragment);
-//
-//	        if (articleFrag != null) {
-//	            // If article frag is available, we're in two-pane layout...
-//
-//	            // Call a method in the ArticleFragment to update its content
-//	            articleFrag.updateArticleView(position);
-//
-//	        } else {
-//	            // If the frag is not available, we're in the one-pane layout and must swap frags...
-//
-//	            // Create fragment and give it an argument for the selected article
-//	            MovieFragment newFragment = new MovieFragment();
-//	            Bundle args = new Bundle();
-//	            args.putInt(MovieFragment.ARG_POSITION, position);
-//	            newFragment.setArguments(args);
-//	            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//
-//	            // Replace whatever is in the fragment_container view with this fragment,
-//	            // and add the transaction to the back stack so the user can navigate back
-//	            transaction.replace(R.id.fragment_container, newFragment);
-//	            transaction.addToBackStack(null);
-//
-//	            // Commit the transaction
-//	            transaction.commit();
-//	        }
-//		}
-//	    
+
 	    
 	    /**
 	     * Detects when user is close to the end of the current page and starts loading the next page
