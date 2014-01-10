@@ -8,8 +8,12 @@ import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.jackymok.tomatoes.app.MyVolley;
 import ca.jackymok.tomatoes.misc.Movie;
@@ -43,7 +47,21 @@ public class SearchResultsActivity extends Activity {
 	        mAdapter = new MovieArrayAdapter(this, 0, mEntries, MyVolley.getImageLoader());
 	        mLvMovie.setAdapter(mAdapter);
 	        handleIntent(getIntent());
+	        
 	        mLvMovie.setOnScrollListener(new EndlessScrollListener());
+	        mLvMovie.setOnItemClickListener(new OnItemClickListener() {
+
+	            @Override
+	            public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+	                    long arg3) {
+	                // TODO Auto-generated method stub
+	                Intent intent = new Intent(getBaseContext(), MovieDetailActivity.class);
+	                intent.putExtra("movie", mEntries.get(pos));
+	                startActivity(intent);
+	                Log.d("clicked on",mEntries.get(pos).getSynopsis() );
+	            }
+
+	        });
 	    }
 
 	    @Override
@@ -55,6 +73,7 @@ public class SearchResultsActivity extends Activity {
 
 	        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 	            query = intent.getStringExtra(SearchManager.QUERY);
+	            setTitle(query);
 	        }
 	    }
 

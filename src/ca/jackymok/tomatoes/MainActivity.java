@@ -15,8 +15,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import ca.jackymok.tomatoes.app.MyVolley;
@@ -39,6 +42,8 @@ public class MainActivity extends Activity {
 	    private boolean mInError = false;
 	    ArrayList<Movie> mEntries = new ArrayList<Movie>();
 	    MovieArrayAdapter mAdapter;
+	    LinearLayout linlaHeaderProgress ;
+
 	    
 
 	    @Override
@@ -46,14 +51,12 @@ public class MainActivity extends Activity {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.activity_main);
 	        //setContentView(R.layout.list_frag);
-	        
+	        linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
 	        mAdapter = new MovieArrayAdapter(this, 0, mEntries, MyVolley.getImageLoader());
 	        mLvMovie = (ListView) findViewById(R.id.lv_movie);
 	        mLvMovie.setAdapter(mAdapter);
-	        
 	        mLvMovie.setOnItemClickListener(new OnItemClickListener() {
 
-	        	
 	            @Override
 	            public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 	                    long arg3) {
@@ -93,6 +96,7 @@ public class MainActivity extends Activity {
 	    private void loadPage() {
 	        RequestQueue queue = MyVolley.getRequestQueue();
 
+	        linlaHeaderProgress.setVisibility(View.VISIBLE);
 	        GsonRequest<Movies> myReq = new GsonRequest<Movies>(Method.GET,
 	                                                "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?limit=16&country=ca&apikey=np8w2uaddk2bjan3b6fncefh",
 	                                                Movies.class,
@@ -108,6 +112,7 @@ public class MainActivity extends Activity {
 	            @Override
 	            public void onResponse(Movies response) {
 	                try {
+	        	        linlaHeaderProgress.setVisibility(View.GONE);
 	                	         	
 	                	List<Movie> movies = response.getMovies();
 	                	Movie movie;
@@ -131,6 +136,8 @@ public class MainActivity extends Activity {
 	        return new Response.ErrorListener() {
 	            @Override
 	            public void onErrorResponse(VolleyError error) {
+	    	        linlaHeaderProgress.setVisibility(View.GONE);
+
                 	Log.d("exception",error.toString());
 
 	                showErrorDialog();
@@ -149,50 +156,5 @@ public class MainActivity extends Activity {
 
 
 	    
-	    /**
-	     * Detects when user is close to the end of the current page and starts loading the next page
-	     * so the user will not have to wait (that much) for the next entries.
-	     * 
-	     
-	    public class EndlessScrollListener implements OnScrollListener {
-	        // how many entries earlier to start loading next page
-	        private int visibleThreshold = 5;
-	        private int currentPage = 0;
-	        private int previousTotal = 0;
-	        private boolean loading = true;
-
-	        public EndlessScrollListener() {
-	        }
-	        public EndlessScrollListener(int visibleThreshold) {
-	            this.visibleThreshold = visibleThreshold;
-	        }
-
-	        @Override
-	        public void onScroll(AbsListView view, int firstVisibleItem,
-	                int visibleItemCount, int totalItemCount) {
-	            if (loading) {
-	                if (totalItemCount > previousTotal) {
-	                    loading = false;
-	                    previousTotal = totalItemCount;
-	                    currentPage++;
-	                }
-	            }
-	            if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-	                // I load the next page of gigs using a background task,
-	                // but you can call any function here.
-	                loadPage();
-	                loading = true;
-	            }
-	        }
-
-	        @Override
-	        public void onScrollStateChanged(AbsListView view, int scrollState) {
-	            
-	        }
-	        
-	        
-	        public int getCurrentPage() {
-	            return currentPage;
-	        }
-	    }*/
+	   
 	}

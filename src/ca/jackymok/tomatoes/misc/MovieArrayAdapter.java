@@ -1,5 +1,9 @@
 package ca.jackymok.tomatoes.misc;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -55,19 +59,31 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         holder.subtitle.setText(entry.getCritics_consensus());
         
         int score = entry.getRatings().getCritics_score();
-        
-        StringBuilder actors = new StringBuilder();
-        
-        actors.append(entry.getAbridged_cast().get(0).getName());
-        actors.append(", ");
-        actors.append(entry.getAbridged_cast().get(1).getName());
-        actors.append(" | ");
-        actors.append(entry.getRelease_dates().getTheater());
-
-        holder.status.setText(actors);
-        holder.rating.setText(entry.getRatings().getCritics_score()+"");
-        holder.rating.setTextColor(score>50? Color.parseColor("#ea6153"):Color.parseColor("#27ae60"));
-
+        if (score >0)
+        {
+	        StringBuilder actors = new StringBuilder();
+	        
+	        if (entry.getAbridged_cast().size()>1)
+	        {
+	        	actors.append(entry.getAbridged_cast().get(0).getName());
+	        	actors.append(", ");
+	        	actors.append(entry.getAbridged_cast().get(1).getName());
+	        	actors.append(" | ");
+	        }
+	
+	        if (entry.getRelease_dates()!=null){
+	        	DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+	        	actors.append(df.format(entry.getRelease_dates().getTheater()));
+	        }
+	       
+	        holder.status.setText(actors);
+	        holder.rating.setText(entry.getRatings().getCritics_score()+"");
+	        holder.rating.setTextColor(score>50? Color.parseColor("#ea6153"):Color.parseColor("#27ae60"));
+        }
+        else
+        {
+        	
+        }
         return v;
     }
     

@@ -37,6 +37,7 @@
             android:name="ca.jackymok.tomatoes.MovieDetailActivity"
             android:label="@string/app_name" >
             <intent-filter>
+                <action android:name="ca.jackymok.tomatoes.SearchResultsActivity" />
                 <action android:name="ca.jackymok.tomatoes.MainActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
